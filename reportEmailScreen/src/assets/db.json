@@ -1,0 +1,41 @@
+{
+  "reportList": [
+    {
+      "id": 1,
+      "name": "Report 1",
+      "emails": [
+        "sameer@gmail.com",
+        "rewa@gmail.com"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Report 2",
+      "emails": [
+        "mahesh@gmail.com"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Report 3",
+      "emails": [
+        "dimpleu@gmail.com",
+        "demo@gmail.com"
+      ]
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "name": "dimple",
+      "email": "dimpleu@gmail.com",
+      "password": "dimpleu12345"
+    },
+    {
+      "id": 2,
+      "name": "jon",
+      "email": "jon@gmail.com",
+      "password": "jon12345"
+    }
+  ]
+}

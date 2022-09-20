@@ -1,0 +1,23 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body {
+     margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; 
+     background-color: rgb(1, 70, 56,4.0);
+}
+
+.colorDarkGreen{
+    color: rgb(1, 70, 56) !important;
+}
+.mat-card {
+    margin: 20px;
+  }
+
+.bgColor{
+    background-color: rgb(1, 70, 56,4.0);
+}
+.bgContainer{
+    background-color: #b6afaf29;
+    height: 100vh;
+    overflow: hidden;
+  }

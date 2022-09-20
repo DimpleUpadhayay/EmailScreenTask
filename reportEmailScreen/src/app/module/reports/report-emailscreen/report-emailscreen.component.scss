@@ -1,0 +1,89 @@
+table {
+  width: 100%;
+}
+
+.mat-paginator-range-label {
+  display: none;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+.mat-form-Field {
+  width: 50%;
+}
+
+/* Border */
+.mat-form-field-appearance-outline .mat-form-field-outline {
+  color: rgb(255, 255, 255);
+  /* background-color: white; */
+}
+/* Font color */
+input.mat-input-element {
+  color: rgb(0, 0, 0);
+}
+
+
+h2 {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.example-chip-list {
+  width: 100%;
+}
+
+.emailScreen {
+  border: 1px solid #ddd;
+  padding: 10px;
+}
+.tagsBorder {
+  border: 1px solid #ffffff;
+  padding: 10px;
+}
+.tag {
+  font-size: 14px;
+  padding: 0.3em 0.4em 0.4em;
+  margin: 10px 0.1em;
+  display: inline-block;
+}
+.tag a {
+  color: #bbb;
+  cursor: pointer;
+  opacity: 0.6;
+}
+.tag a:hover {
+  opacity: 1;
+}
+.tag .remove {
+  vertical-align: bottom;
+  top: 0;
+}
+.tag a {
+  margin: 0 0 0 0.3em;
+}
+.tag a .glyphicon-white {
+  color: #fff;
+  margin-bottom: 2px;
+}
+
+.label-info {
+  background-color: #337ab7 !important;
+}
+.btn {
+  margin: 5px;
+}
+
+mat-form-field.mat-form-field {
+  font-size: 16px;
+}
+.reportsContainer{
+  background-color: #b6afaf29;
+  height: 100vh;
+  overflow: hidden;
+}
+.heading{
+  text-align: inherit;
+}
