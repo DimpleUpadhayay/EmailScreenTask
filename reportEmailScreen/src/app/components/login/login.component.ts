@@ -58,8 +58,8 @@ export class LoginComponent implements OnInit {
         this.submitEM.emit(this.loginForm.value);
         console.log("this.loginForm.value",this.loginForm.value)
         if(this.usersData){
-          const user = this.usersData.find((user)=>{
-            console.log("user",user);
+          const user = this.usersData.find((user:any)=>{
+            // console.log("user",user);
              return user.email === this.loginForm.value.email && user.password === this.loginForm.value.password
           });
           if(user){

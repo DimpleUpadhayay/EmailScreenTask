@@ -5,7 +5,7 @@
 
 .sidenav {
   width: 200px;
-  background-color:#00695c !important;
+  background-color: rgb(1, 70, 56,4.0) !important ;
 }
 
 .sidenav .mat-toolbar {
@@ -28,3 +28,10 @@ mat-drawer-inner-container{
 .color{
   color:#ffffff;
 }
+.active-list-item{
+  // background-color: #e0e0e0 !important;
+  // color: rgb(1, 70, 56,4.0) !important ;
+}
+.mat-nav-list :hover { 
+   background-color: #e0e0e0 !important;
+  color: rgb(1, 70, 56,4.0) !important ; }
