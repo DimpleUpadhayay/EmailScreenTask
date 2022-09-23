@@ -5,7 +5,7 @@
       "name": "Report 1",
       "emails": [
         "sameer@gmail.com",
-        "hits@gmail.com"
+        "test@gmail.com"
       ]
     },
     {
@@ -19,8 +19,8 @@
       "id": 3,
       "name": "Report 3",
       "emails": [
-        "test@gmail.com",
-        "dimpleu@gmail.com"
+        "dimpleu@gmail.com",
+        "demo@gmail.com"
       ]
     }
   ],

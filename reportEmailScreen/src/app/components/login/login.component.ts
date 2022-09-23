@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
   @Input() error: string | null;
   @Output() submitEM = new EventEmitter();
   hide = true;
-  usersData: Object;
+  usersData: any;
 
   constructor(private fb : FormBuilder,
      private route :Router,private apiService:ApiService, private toastr: ToastrService
@@ -44,14 +44,13 @@ export class LoginComponent implements OnInit {
    }
 
   getUsersDetails(){
-      this.apiService.getUsersList().subscribe(
-        (data) => {
+      this.apiService.getUsersList().subscribe(data => {
           this.usersData = data;
         },
         (err) => {
           console.log("errr", err);
         }
-      );
+      )
     }
     submitLoginForm() {
       if (this.loginForm.valid) {

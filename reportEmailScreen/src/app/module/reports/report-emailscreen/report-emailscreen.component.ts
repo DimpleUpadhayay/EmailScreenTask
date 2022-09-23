@@ -35,6 +35,7 @@ export class ReportEmailscreenComponent implements OnInit {
   emails: string;
   isEdit: boolean = true;
   btnVisible:boolean = false;
+  _reportsData: any= [];
   constructor(
     private fb: FormBuilder,
     private _formBuilder: FormBuilder,
@@ -51,6 +52,7 @@ export class ReportEmailscreenComponent implements OnInit {
     this.apiService.getReportList().subscribe(
       (data) => {
         this.reportData = data;
+        this._reportsData = data;
         this.isLoading = false;
       },
       (err) => {
@@ -99,16 +101,23 @@ export class ReportEmailscreenComponent implements OnInit {
     this.reportData[reportIndex].emails = this.reportEmails;
   }
   postReportData(reportId) {
+    let _params ={
+      recipientsEmails:{
+        existing:[],
+        deleted:[],
+        created:[]
+      }
+    }
     let payload = {
       emails: this.reportEmails,
     };
     if(reportId){
       this.btnVisible = true;
     }
-    this.apiService.postReportListData(reportId, payload).subscribe((data) => {
-      this.getReportListData();
-      this.isLoading = true;
-      this.isLoading = false;
+    this.apiService.postReportListData(reportId, payload).subscribe((res) => {
+    this.isLoading = true;
+    // this.getReportListData();
+      
      
     });
    
