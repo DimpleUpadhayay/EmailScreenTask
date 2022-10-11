@@ -8,14 +8,22 @@ import {
 } from "@angular/forms";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatTable, MatTableDataSource } from "@angular/material/table";
-import { startWith, tap, delay } from "rxjs/operators";
+import { startWith, tap, delay, filter } from "rxjs/operators";
 import { ApiService } from "src/app/services/api.service";
-import { AlertService } from "src/app/services/alert.service";
 import { MatChipInputEvent } from "@angular/material/chips";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { MatFormFieldAppearance } from "@angular/material/form-field";
 import { ToastrService } from "ngx-toastr";
-import { of } from 'rxjs';
+interface ReportData{
+  id:number,
+  name:string,
+  frequency:string,
+  recipientsEmail:{
+    existing:string[],
+    inserted:string[],
+    deleted:string[]
+  }
+}
 
 @Component({
   selector: "app-report-emailscreen",
@@ -23,37 +31,61 @@ import { of } from 'rxjs';
   styleUrls: ["./report-emailscreen.component.scss"],
 })
 export class ReportEmailscreenComponent implements OnInit {
-  displayedColumns: string[] = ["id", "name", "emails","frequency" ,"action"];
+  displayedColumns: string[] = ["id", "name", "emails", "frequency", "action"];
   addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
-  reportEmails: any = [];
   isLoading = true;
-  reportData;
-  postData: any;
-  reportId: any;
-  selectedReportId: any;
-  emails: string;
-  isEdit: boolean = true;
-  btnVisible:boolean = false;
-  _reportsData: any= [];
+  reportData:ReportData[];
+  dataSource: MatTableDataSource<any>;
+  isVisible: boolean = false;
+  search:string
+  editableRow = {
+    id: null,
+    isEditable: false,
+  };
+  index
   constructor(
     private fb: FormBuilder,
     private _formBuilder: FormBuilder,
     private apiService: ApiService,
     private toastr: ToastrService
-  ) {}
+  ) {
+    
+  }
 
   ngOnInit() {
     this.getReportListData();
+    this.dataSource = new MatTableDataSource(this.reportData);
+    this.dataSource.filterPredicate = (data,filter) =>  {
+      true
+      return data.recipientsEmail.existing.filter((res:any) =>{
+        res.indexOf(filter) != -1 
+        
+       }
+      )
+    }
+    this.dataSource = new MatTableDataSource(this.reportData);
     
-  }
+   
+}
   // Get Report List
   getReportListData() {
     this.apiService.getReportList().subscribe(
-      (data) => {
-        this.reportData = data;
-        this._reportsData = data;
-        this.isLoading = false;
+      (data: any) => {
+        this.reportData =  data.map((item) => {
+          return {
+            ...item,
+            recipientsEmail: {
+              existing: [...item.recipientsEmail.existing],
+              deleted: [],
+              inserted: [],
+            },
+          };
+        });
+      
+        this.dataSource = new MatTableDataSource(this.reportData);
+        
+       this.isLoading = false;
       },
       (err) => {
         this.isLoading = false;
@@ -63,63 +95,102 @@ export class ReportEmailscreenComponent implements OnInit {
   }
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.reportData.filter = filterValue.trim().toLowerCase();
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+   
+    console.log(this.dataSource.filteredData);
+    
   }
 
-  onEditEmail(emails, id) {
-    event.preventDefault();
-    this.selectedReportId = id;
-    this.isEdit = false;
-    this.reportEmails = [...emails];
+  onEditEmail(reportId, isEditable) {
+    this.editableRow = {
+      id: reportId,
+      isEditable,
+    };
   }
 
-  cancelEdit(id) {
-    this.isEdit = true;
-    this.selectedReportId = !id;
+  cancelEdit(reportId) {
+    this.editableRow.id = !reportId;
   }
 
-  addNewEmail(event: MatChipInputEvent, reportID) {
-    if(event){
-      this.btnVisible = true;
+  addNewEmail(event: MatChipInputEvent, reportId, emailIndex: number) {
+    // debugger
+    const value = (event.value || "").trim();
+    const validRegex = new RegExp(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/);
+    const indx = this.reportData.findIndex((report) => report.id === reportId);
+      //  this.index =indx
+    // checking that email is valid or not
+    if (validRegex.test(value)) {
+      // for duplicate entery not allowed
+      if (
+        value &&
+        indx >= 0 &&
+        this.reportData[indx].recipientsEmail.existing.indexOf(value) === -1 &&
+        this.reportData[indx].recipientsEmail.inserted.indexOf(value) === -1
+      ) {
+        // comparing two array while insert will not presnt in deleted emails array
+        if (
+          this.reportData[indx].recipientsEmail.deleted.filter(
+            (email) =>
+              !this.reportData[indx].recipientsEmail.inserted.includes(email)
+          )
+        ) {
+          const index = this.reportData[indx].recipientsEmail.deleted.indexOf(
+            value
+          );
+          if (index !== -1) {
+            this.reportData[indx].recipientsEmail.deleted.splice(index, 1);
+            this.reportData[indx].recipientsEmail.existing.push(value);
+          } else {
+            this.reportData[indx].recipientsEmail.inserted.push(value);
+          }
+        }
+      }
+      event.input.value = "";
+    } else {
+      event.input.value = "";
+      console.log("Invalid email");
     }
-    this.reportId = reportID;
-    const newEmail = (event.value || "").trim();
-    if (newEmail) {
-      this.reportEmails.push(newEmail);
-      this.reportData[this.reportId - 1].emails = [];
-      this.reportData[this.reportId - 1].emails = this.reportEmails;
+    if (reportId) {
+      this.isVisible = true;
     }
-    // Clear the input value
-    event.input.value = "";
   }
-
-  removeEmail(emailIndex, reportIndex,$event): void {
-    if($event){
-      this.btnVisible = true;
+  removeEmail(emailIndex: number, email: string, report: any): void {
+    const indx = this.reportData.findIndex(
+      (reportObj) => reportObj.id === report.id
+    );
+    const insertedEmailIndex = this.reportData[
+      indx
+    ].recipientsEmail.inserted.indexOf(email);
+    if (insertedEmailIndex !== -1) {
+      this.reportData[indx].recipientsEmail.inserted.splice(
+        insertedEmailIndex,
+        1
+      );
+      return;
     }
-    this.reportEmails.splice(emailIndex, 1);
-    this.reportData[reportIndex].emails = this.reportEmails;
+    if (indx >= 0) {
+      this.reportData[indx].recipientsEmail.existing.splice(emailIndex, 1);
+      this.reportData[indx].recipientsEmail.deleted.push(email);
+    }
+    if (report.id) {
+      this.isVisible = true;
+    }
   }
   postReportData(reportId) {
-    let _params ={
-      recipientsEmails:{
-        existing:[],
-        deleted:[],
-        created:[]
-      }
+    const indx = this.reportData.findIndex((report) => report.id === reportId);
+    if (reportId) {
+      this.isVisible = true;
     }
-    let payload = {
-      emails: this.reportEmails,
+    let requestParams = {
+      recipientsEmail: this.reportData[indx].recipientsEmail,
     };
-    if(reportId){
-      this.btnVisible = true;
-    }
-    this.apiService.postReportListData(reportId, payload).subscribe((res) => {
-    this.isLoading = true;
-    // this.getReportListData();
-      
-     
-    });
-   
+    this.apiService.postReportListData(reportId, requestParams).subscribe(
+      (res) => {
+        this.isLoading = true;
+        // this.getReportListData();
+      },
+      (err) => console.error(err),
+      () => console.log("Error")
+    );
   }
 }

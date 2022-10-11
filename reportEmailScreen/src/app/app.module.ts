@@ -9,10 +9,10 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MaterialModule } from './material.module'
 import { HttpClientModule } from '@angular/common/http';
 import { ApiService } from './services/api.service';
-import { AlertService } from './services/alert.service';
 import { PagenotfoundComponent } from './components/pagenotfound/pagenotfound.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
-import {ToastrModule} from 'ngx-toastr'
+import {ToastrModule} from 'ngx-toastr';
+
 
 
 @NgModule({
@@ -20,7 +20,8 @@ import {ToastrModule} from 'ngx-toastr'
     AppComponent,
     LoginComponent,
     PagenotfoundComponent,
-    SidebarComponent
+    SidebarComponent,
+    
    
   ],
   imports: [
@@ -31,10 +32,11 @@ import {ToastrModule} from 'ngx-toastr'
     MaterialModule,
     HttpClientModule,
     FormsModule,
+    
     ToastrModule.forRoot(), // ToastrModule added
 
   ],
-  providers: [ApiService,AlertService],
+  providers: [ApiService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

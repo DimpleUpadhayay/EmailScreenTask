@@ -2,26 +2,53 @@
   "reportList": [
     {
       "id": 1,
-      "name": "Report 1",
-      "emails": [
-        "sameer@gmail.com",
-        "test@gmail.com"
-      ]
+      "name": "D Report 11",
+      "frequency": "weekly",
+      "recipientsEmail": {
+        "existing": [
+          "dimpleu@gmail.com",
+          "nena@gmail.com"
+        ],
+        "deleted": [],
+        "inserted": []
+      }
     },
     {
       "id": 2,
-      "name": "Report 2",
-      "emails": [
-        "mahesh@gmail.com"
-      ]
+      "name": "M Report 2",
+      "frequency": "yearly",
+      "recipientsEmail": {
+        "existing": [
+          "sameer@gmail.com",
+          "bruno@gmail.com"
+        ],
+        "deleted": [],
+        "inserted": [
+          "testnew@gmail.com"
+        ]
+      }
     },
     {
       "id": 3,
-      "name": "Report 3",
-      "emails": [
-        "dimpleu@gmail.com",
-        "demo@gmail.com"
-      ]
+      "name": "Q Report 3",
+      "frequency": "monthly",
+      "recipientsEmail": {
+        "existing": [
+          "dimpleu@gmail.com",
+          "hanaya@gmail.com"
+        ],
+        "deleted": [
+          "d@gmail.com",
+          "d2@gmail.com",
+          "test2@gmail.com",
+          "itsme@gmail.com",
+          "dims@gmail.com",
+          "test@gmail.com"
+        ],
+        "inserted": [
+          "chintan@gmail.com"
+        ]
+      }
     }
   ],
   "users": [
